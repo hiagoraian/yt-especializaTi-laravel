@@ -15,9 +15,10 @@
                 <td>{{ $item->status }}</td>
                 <td>{{ $item->body }}</td>
                 <td>
-                    >
+                    <a href="{{route ('supports.show', $item->id)}}">Ver mais</a>
+                    <a href="{{route ('supports.edit', $item->id)}}">Editar</a>
                 </td>
             </tr>
         @endforeach
     </tbody>
-</table>
+</table> 
