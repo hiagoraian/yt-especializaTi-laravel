@@ -5,3 +5,9 @@
     <li>Descrição: {{$support->body}}</li>
     <li>Status: {{$support->status}}</li>
 </ul>
+
+<form action="{{route('supports.destroy', $support->id)}}" method="post" >
+    @csrf()
+    @method('delete')
+    <button type="submit">Deletar</button>
+</form>
