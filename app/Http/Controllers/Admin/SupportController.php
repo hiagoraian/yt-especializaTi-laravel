@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use APP\DTO\createSupportDTO;
+use App\DTO\UpdateSupportDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateSupportRequest;
 use App\Models\Support;
@@ -29,11 +31,24 @@ class SupportController extends Controller{
 
     public function store(StoreUpdateSupportRequest $request, Support $support){
 
-        $data = $request->validated();
-        $data['status'] = 'ativo';
+        $this->service->new(
+            createSupportDTO::makeFromRequest($request)
+        );
 
-        $support->create($data);
+        return redirect()->route('supports.index');
 
+    }
+
+    public function update(StoreUpdateSupportRequest $request, Support $support){
+
+       $support =  $this->service->update(
+            UpdateSupportDTO::makeFromRequest($request)
+        );
+        
+        if(!$support){
+            return back();
+        }
+        
         return redirect()->route('supports.index');
 
     }
@@ -50,31 +65,11 @@ class SupportController extends Controller{
     }
 
     public function edit(string $id ){
-       // if(!$support = $support->where('id',$id)->first()){
+   
         if(!$support = $this->service->findOne($id)){
             return back();
         }
         return view('admin.supports.edit', compact('support'));
-    }
-
-    public function update(StoreUpdateSupportRequest $request, string|int $id, Support $support){
-
-        if(!$support = $support->where('id',$id)->first()){
-            return back();
-        }
-
-        # support->subject = $request->subject;
-        # $support->body = $request->body;
-        # $support->save();
-
-        // $support->update($request->only([
-        //    'subject', 'body'
-        //]));
-
-        $support->update($request->validated());
-        
-        return redirect()->route('supports.index');
-
     }
 
     public function destroy (string $id){
