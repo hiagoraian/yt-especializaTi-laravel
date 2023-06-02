@@ -33,7 +33,7 @@ class SupportEloquentORM implements SupportRepositoryInterface
         
         $support = $this->model->find($id);
 
-        if($support){
+        if(!$support){
             return null;
         }
 
